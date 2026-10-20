@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dikesh Ganboi Portfolio
 
-## Getting Started
+Personal portfolio for Dikesh Ganboi, a Full-Stack Developer based in Pune, Maharashtra.
 
-First, run the development server:
+## Tech stack
+
+- Next.js 15 App Router
+- TypeScript
+- Tailwind CSS v4
+- Framer Motion
+- Lenis smooth scrolling
+- Lucide React and React Icons
+- Web3Forms
+- Vercel Analytics and Speed Insights
+
+## Features
+
+- Responsive animated hero and sticky navigation
+- Project filtering with image fallbacks
+- About, skills, achievements, education, and contact sections
+- Accessible contact form with Web3Forms and mailto fallback
+- SEO metadata, Open Graph image, sitemap, robots, and Person JSON-LD
+- Reduced-motion support, focus states, security headers, and mobile navigation
+
+## Folder structure
+
+```text
+src/
+  app/                    App Router pages, metadata, sitemap, robots, error UI
+  components/
+    layout/               Navbar, smooth scrolling, footer, global polish
+    sections/             Portfolio sections and project cards
+    ui/                   Reusable motion and presentation primitives
+  data/                   Typed portfolio content
+  lib/                    Site configuration and utilities
+public/                   Images, project previews, and resume PDF
+```
+
+## Local setup
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+## Environment variables
+
+Create `.env.local` in the project root:
+
+```env
+NEXT_PUBLIC_SITE_URL=https://dikeshganboi.me
+NEXT_PUBLIC_WEB3FORMS_KEY=your_web3forms_access_key
+```
+
+`NEXT_PUBLIC_WEB3FORMS_KEY` enables the contact form submission. If it is absent, the form opens a prefilled email instead.
+
+## Scripts
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run lint
+npm run build
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deployment
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Import the repository into Vercel, set `NEXT_PUBLIC_SITE_URL` and `NEXT_PUBLIC_WEB3FORMS_KEY` in the project environment variables, and deploy. Vercel automatically detects the Next.js build and serves the generated sitemap, robots file, and Open Graph image.
