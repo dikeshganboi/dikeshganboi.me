@@ -10,7 +10,8 @@ import {
   ShieldCheck,
   Wrench,
 } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import {
   FaJava,
 } from "react-icons/fa";
@@ -35,10 +36,10 @@ import {
   SiVercel,
 } from "react-icons/si";
 import type { IconType } from "react-icons";
-import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { portfolio, type Skill } from "@/data/portfolio";
 import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
+import Container from "@/components/ui/Container";
 
 const skillIcons: Record<string, IconType> = {
   FaJava,
@@ -77,22 +78,23 @@ export default function Skills() {
   const marqueeSkills = Object.values(portfolio.skills).flat();
   const marqueeRef = useRef<HTMLDivElement>(null);
   const [marqueeVisible, setMarqueeVisible] = useState(false);
+
   useEffect(() => {
     const element = marqueeRef.current;
     if (!element) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => setMarqueeVisible(entry.isIntersecting),
-      { threshold: 0.05 },
-    );
+    const observer = new IntersectionObserver(([entry]) => {
+      setMarqueeVisible(entry.isIntersecting);
+    }, { threshold: 0.1 });
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
+
   return (
     <section
       id="skills"
-      className="scroll-mt-24 overflow-x-clip border-b border-white/5 py-24 sm:py-32"
+      className="scroll-mt-24 overflow-x-clip border-b-2 border-ink/20 py-24 sm:py-32"
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+      <Container>
         <Reveal>
           <SectionHeading
             label="Skills"
@@ -101,11 +103,14 @@ export default function Skills() {
           />
         </Reveal>
 
-        <div ref={marqueeRef} className={`relative mt-12 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] ${marqueeVisible ? "" : "marquee-paused"}`}>
-          <div className="space-y-3">
+        <div ref={marqueeRef} className={`skills-marquee relative mt-12 ${marqueeVisible ? "is-visible" : ""}`}>
+          <div className="skills-marquee-track space-y-3" aria-hidden="true">
             <SkillMarquee skills={marqueeSkills} reverse={false} />
             <SkillMarquee skills={[...marqueeSkills].reverse()} reverse />
           </div>
+          <ul className="sr-only">
+            {marqueeSkills.map((skill) => <li key={`accessible-${skill.name}`}>{skill.name}</li>)}
+          </ul>
         </div>
 
         <div className="mt-14 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -119,7 +124,7 @@ export default function Skills() {
             />
           ))}
         </div>
-      </div>
+      </Container>
     </section>
   );
 }
@@ -152,50 +157,30 @@ function SkillGroupCard({
   index: number;
   className?: string;
 }) {
-  const [pointer, setPointer] = useState({ x: "50%", y: "50%" });
   const reducedMotion = useReducedMotion() ?? false;
   const GroupIcon = groupIcons[group as keyof typeof groupIcons];
 
-  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType === "touch") return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    setPointer({
-      x: `${((event.clientX - bounds.left) / bounds.width) * 100}%`,
-      y: `${((event.clientY - bounds.top) / bounds.height) * 100}%`,
-    });
-  };
-
   return (
     <Reveal delay={index * 0.06} className={className}>
-      <motion.div
-        onPointerMove={handlePointerMove}
+      <m.div
         whileHover={reducedMotion ? undefined : { y: -4 }}
-        style={
-          {
-            "--spotlight-x": pointer.x,
-            "--spotlight-y": pointer.y,
-          } as CSSProperties
-        }
-        className="group relative h-full overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6"
+        className="group relative h-full overflow-hidden border-2 border-ink bg-paper-2 p-6"
       >
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          style={{
-            background:
-              "radial-gradient(280px circle at var(--spotlight-x) var(--spotlight-y), rgba(34,211,238,0.13), transparent 68%)",
-          }}
+            style={{ background: "var(--paper-2)" }}
         />
         <div className="relative">
           <div className="flex items-center gap-3">
-            <span className="rounded-xl border border-white/10 bg-white/5 p-2 text-cyan-300">
+            <span className="border border-ink bg-paper p-2 text-ink">
               <GroupIcon size={19} />
             </span>
-            <h3 className="font-heading text-xl font-semibold text-white">{group}</h3>
+            <h3 className="text-xl font-semibold text-ink">{group}</h3>
           </div>
           <div className="mt-6 flex flex-wrap gap-2">
             {skills.map((skill, skillIndex) => (
-              <motion.div
+              <m.div
                 key={skill.name}
                 initial={reducedMotion ? false : { opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
@@ -203,11 +188,11 @@ function SkillGroupCard({
                 transition={{ delay: reducedMotion ? 0 : skillIndex * 0.04 }}
               >
                 <SkillChip skill={skill} />
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </Reveal>
   );
 }
@@ -216,11 +201,11 @@ function SkillChip({ skill, marquee = false }: { skill: Skill; marquee?: boolean
   const Icon = skill.icon ? skillIcons[skill.icon] : undefined;
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 text-white/75 ${
-        marquee ? "px-4 py-2 text-sm" : "px-3 py-2 text-xs"
+      className={`inline-flex items-center gap-2 border border-ink bg-paper px-3 py-2 font-mono text-ink ${
+        marquee ? "px-4 py-2 text-sm" : "text-xs"
       }`}
     >
-      {Icon ? <Icon className="text-cyan-300" size={marquee ? 16 : 14} /> : null}
+      {Icon ? <Icon className="text-ink" size={marquee ? 16 : 14} /> : null}
       {skill.name}
     </span>
   );

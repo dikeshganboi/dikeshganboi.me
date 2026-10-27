@@ -1,4 +1,4 @@
-import { readdir, stat } from "node:fs/promises";
+import { readdir, rename, stat, unlink } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -9,10 +9,13 @@ const formatBytes = (bytes) => `${(bytes / 1024).toFixed(1)} KB`;
 
 async function convert(input, output, width, quality) {
   const inputSize = (await stat(input)).size;
+  const temporaryOutput = `${output}.tmp`;
   await sharp(input)
     .resize({ width, withoutEnlargement: true })
     .webp({ quality })
-    .toFile(output);
+    .toFile(temporaryOutput);
+  if (input === output) await unlink(output);
+  await rename(temporaryOutput, output);
   const outputSize = (await stat(output)).size;
   console.log(
     `${path.relative(root, input)}: ${formatBytes(inputSize)} -> ${path.relative(
@@ -23,22 +26,28 @@ async function convert(input, output, width, quality) {
 }
 
 await convert(
-  path.join(publicDir, "images", "dikesh-hero.png"),
   path.join(publicDir, "images", "dikesh-hero.webp"),
-  1200,
-  82,
+  path.join(publicDir, "images", "dikesh-hero-900.webp"),
+  900,
+  80,
 );
 await convert(
-  path.join(publicDir, "images", "dikesh-hero-navy.png"),
   path.join(publicDir, "images", "dikesh-hero-navy.webp"),
-  1200,
-  82,
+  path.join(publicDir, "images", "dikesh-hero-navy-900.webp"),
+  900,
+  80,
 );
 await convert(
-  path.join(publicDir, "images", "dikesh-avatar.jpg"),
+  path.join(publicDir, "images", "dikesh-hero-navy.webp"),
+  path.join(publicDir, "images", "dikesh-hero-navy-160.webp"),
+  160,
+  80,
+);
+await convert(
   path.join(publicDir, "images", "dikesh-avatar.webp"),
+  path.join(publicDir, "images", "dikesh-avatar-optimized.webp"),
   800,
-  82,
+  80,
 );
 
 const projectDir = path.join(publicDir, "projects");

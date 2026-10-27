@@ -8,11 +8,11 @@ export default function Error({ error, reset }: { error: Error & { digest?: stri
   return (
     <main className="flex min-h-screen items-center justify-center px-5 text-center">
       <div>
-        <p className="text-gradient font-heading text-5xl font-bold">Something went wrong</p>
-        <p className="mt-3 text-white/55">Please try again or return home.</p>
+        <p className="font-heading text-5xl text-ink">Something went wrong</p>
+        <p className="mt-3 text-ink-soft">Please try again or return home.</p>
         <div className="mt-7 flex justify-center gap-3">
-          <button onClick={reset} className="rounded-full border border-white/15 px-5 py-3 text-sm text-white">Try again</button>
-          <Link href="/" className="bg-accent-gradient rounded-full px-5 py-3 text-sm font-semibold text-white">Back home</Link>
+          <button onClick={reset} className="button-editorial px-5 py-3 font-mono text-xs uppercase">Try again</button>
+          <Link href="/" className="button-editorial bg-accent px-5 py-3 font-mono text-xs uppercase text-accent-ink">Back home</Link>
         </div>
       </div>
     </main>

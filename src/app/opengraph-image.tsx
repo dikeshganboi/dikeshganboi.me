@@ -9,25 +9,23 @@ export default function OpenGraphImage() {
   return new ImageResponse(
     <div
       style={{
-        background: "#0a0a0f",
-        color: "white",
+        background: "#F3EFE6",
+        color: "#15130F",
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         padding: "80px",
         width: "100%",
         height: "100%",
-        backgroundImage:
-          "radial-gradient(circle at 15% 20%, rgba(139,92,246,.35), transparent 35%), radial-gradient(circle at 85% 70%, rgba(34,211,238,.25), transparent 35%)",
       }}
     >
-      <div style={{ fontSize: 76, fontWeight: 700, background: "linear-gradient(110deg,#8b5cf6,#22d3ee)", backgroundClip: "text", color: "transparent" }}>
+      <div style={{ fontSize: 76, fontFamily: "serif", color: "#15130F" }}>
         {siteName}
       </div>
-      <div style={{ marginTop: 24, fontSize: 32, color: "#d4d4d8" }}>
-        Full-Stack Developer | IEEE Published Researcher
+      <div style={{ marginTop: 24, fontSize: 32, color: "#4A463D" }}>
+        Full-stack apps, tested before they ship.
       </div>
-      <div style={{ marginTop: 100, fontSize: 24, color: "#a1a1aa" }}>
+      <div style={{ marginTop: 100, fontSize: 24, color: "#FF4A1C" }}>
         dikeshganboi.me
       </div>
     </div>,

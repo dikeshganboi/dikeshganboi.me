@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
+import { m, useReducedMotion, useScroll, useSpring } from "framer-motion";
 
 export default function ScrollProgress() {
   const reducedMotion = useReducedMotion() ?? false;
@@ -12,9 +12,9 @@ export default function ScrollProgress() {
   });
 
   return (
-    <motion.div
+    <m.div
       aria-hidden="true"
-      className="bg-accent-gradient fixed inset-x-0 top-0 z-[60] h-0.5 origin-left"
+      className="fixed inset-x-0 top-0 z-[60] h-[3px] origin-left bg-accent"
       style={{ scaleX: reducedMotion ? scrollYProgress : progress }}
     />
   );

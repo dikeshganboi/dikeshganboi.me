@@ -38,6 +38,8 @@ export interface Socials {
 export interface Images {
   hero: string;
   heroAlt: string;
+  photo: string;
+  thumb: string;
   avatar: string;
 }
 
@@ -47,9 +49,8 @@ export interface Stat {
 }
 
 export interface HeroContent {
-  badge: string;
-  typingPhrases: string[];
-  floatingBadges: string[];
+  greeting: string;
+  roles: string[];
 }
 
 export interface Skill {
@@ -273,9 +274,11 @@ export const portfolio: PortfolioData = {
     ieeePaper: "https://ieeexplore.ieee.org/document/11378088",
   },
   images: {
-    hero: "/images/dikesh-hero.webp",
-    heroAlt: "/images/dikesh-hero-navy.webp",
-    avatar: "/images/dikesh-avatar.webp",
+    hero: "/images/dikesh-hero-900.webp",
+    heroAlt: "/images/dikesh-hero-navy-900.webp",
+    photo: "/images/dikesh-hero-navy-900.webp",
+    thumb: "/images/dikesh-hero-navy-160.webp",
+    avatar: "/images/dikesh-avatar-optimized.webp",
   },
   stats: [
     { label: "Projects Built", value: 7 },
@@ -285,14 +288,13 @@ export const portfolio: PortfolioData = {
   ],
   resumeUrl: "/Dikesh_Ganboi_CV.pdf",
   hero: {
-    badge: "Open to work - Fresher 2026",
-    typingPhrases: [
+    greeting: "Hi, I'm",
+    roles: [
       "Full-Stack Developer",
       "React & Node.js Builder",
       "IEEE Published Researcher",
       "Bug Hunter & Tester",
     ],
-    floatingBadges: ["React", "Node.js", "IEEE Paper", "1st - Avishkar 2025"],
   },
   about: {
     paragraphs: [

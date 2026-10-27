@@ -3,9 +3,10 @@
 import Image from "next/image";
 import { ExternalLink, Layers3, Monitor, Code2 } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
-import { useState, type CSSProperties, type PointerEvent } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useState } from "react";
+import { m, useReducedMotion } from "framer-motion";
 import type { Project } from "@/data/portfolio";
+import { portfolio } from "@/data/portfolio";
 
 interface ProjectCardProps {
   project: Project;
@@ -20,44 +21,20 @@ const categoryIcons = {
 
 export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   const [imageFailed, setImageFailed] = useState(false);
-  const [pointer, setPointer] = useState({ x: "50%", y: "50%" });
   const reducedMotion = useReducedMotion() ?? false;
   const CategoryIcon = categoryIcons[project.category];
 
-  const handlePointerMove = (event: PointerEvent<HTMLElement>) => {
-    if (event.pointerType === "touch") return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    setPointer({
-      x: `${((event.clientX - bounds.left) / bounds.width) * 100}%`,
-      y: `${((event.clientY - bounds.top) / bounds.height) * 100}%`,
-    });
-  };
-
-  const style = {
-    "--spotlight-x": pointer.x,
-    "--spotlight-y": pointer.y,
-  } as CSSProperties;
-
   return (
-    <motion.article
+    <m.article
       layout
       initial={reducedMotion ? false : { opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={reducedMotion ? undefined : { opacity: 0, scale: 0.96 }}
       transition={{ duration: 0.45, delay: reducedMotion ? 0 : index * 0.06 }}
-      onPointerMove={handlePointerMove}
-      style={style}
-      className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/[0.045] p-px transition-transform duration-300 hover:-translate-y-1"
+      className="group relative flex h-full flex-col overflow-hidden border-2 border-ink bg-paper-2 shadow-[6px_6px_0_var(--ink)] transition-transform duration-200 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[8px_8px_0_var(--ink)]"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background:
-            "radial-gradient(320px circle at var(--spotlight-x) var(--spotlight-y), rgba(34,211,238,0.14), transparent 65%)",
-        }}
-      />
-      <div className="relative flex h-full flex-col overflow-hidden rounded-[calc(1.5rem-1px)] bg-[#11111a]">
+      <div className="relative flex h-full flex-col overflow-hidden bg-paper-2">
+        <ProjectTicketHeader project={project} number={portfolio.projects.indexOf(project) + 1} />
         <ProjectImage
           project={project}
           failed={imageFailed}
@@ -66,22 +43,22 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
         />
         <div className="flex flex-1 flex-col p-5 sm:p-6">
           <div className="mb-3 flex items-center justify-between gap-3">
-            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-cyan-200">
+            <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-ink-soft">
               <CategoryIcon size={14} />
               {project.category}
             </span>
           </div>
-          <h3 className="font-heading text-xl font-semibold text-white">
+          <h3 className="text-xl font-semibold text-ink">
             {project.title}
           </h3>
-          <p className="mt-3 line-clamp-4 text-sm leading-6 text-[var(--muted)]">
+          <p className="mt-3 line-clamp-4 text-sm leading-6 text-ink-soft">
             {project.description}
           </p>
           <ProjectTech tech={project.tech} />
           <ProjectLinks project={project} />
         </div>
       </div>
-    </motion.article>
+    </m.article>
   );
 }
 
@@ -96,17 +73,8 @@ export function ProjectImage({
   onError: () => void;
   className: string;
 }) {
-  const initials = project.title
-    .split(/[\s-]+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase();
-  const CategoryIcon = categoryIcons[project.category];
-
   return (
-    <div className={`group/image relative aspect-video overflow-hidden ${className}`}>
+    <div className={`group/image relative aspect-video overflow-hidden border-2 border-ink ${className}`}>
       {!failed && project.image ? (
         <Image
           src={project.image}
@@ -118,51 +86,43 @@ export function ProjectImage({
           className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
         />
       ) : (
-        <ProjectPlaceholder
-          initials={initials}
-          category={project.category}
-          Icon={CategoryIcon}
-        />
+        <ProjectPlaceholder category={project.category} />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#11111a] via-transparent to-transparent opacity-70" />
     </div>
   );
 }
 
 export function ProjectPlaceholder({
-  initials,
   category,
-  Icon,
 }: {
-  initials: string;
   category: Project["category"];
-  Icon: typeof Layers3;
 }) {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center bg-[radial-gradient(circle_at_25%_20%,rgba(139,92,246,0.48),transparent_38%),linear-gradient(135deg,#19152d,#0d2530)]">
-      <Icon className="mb-3 text-cyan-200/70" size={24} />
-      <span className="font-heading text-4xl font-bold tracking-widest text-white/80">
-        {initials}
-      </span>
-      <span className="mt-2 text-xs uppercase tracking-[0.2em] text-white/50">
-        {category}
-      </span>
+    <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden bg-paper-2">
+      <svg aria-hidden="true" className="absolute inset-0 h-full w-full text-ink/20" preserveAspectRatio="none">
+        <defs>
+          <pattern id="project-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <path d="M 0 0 V 12" stroke="currentColor" strokeWidth="1" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#project-hatch)" />
+      </svg>
+      <span className="relative font-mono text-xs font-bold uppercase tracking-[0.12em] text-ink">No preview</span>
+      <span className="relative mt-2 font-mono text-[10px] uppercase text-ink-soft">{category}</span>
     </div>
   );
 }
 
 export function ProjectTech({ tech }: { tech: string[] }) {
   if (tech.length === 0) return null;
+  return <p className="mt-5 font-mono text-xs text-ink-soft">{tech.join(" / ")}</p>;
+}
+
+export function ProjectTicketHeader({ project, number }: { project: Project; number: number }) {
   return (
-    <div className="mt-5 flex flex-wrap gap-1.5">
-      {tech.map((item) => (
-        <span
-          key={item}
-          className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/65"
-        >
-          {item}
-        </span>
-      ))}
+    <div className="flex items-center justify-between border-b-2 border-ink px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-ink">
+      <span>PRJ-{String(number).padStart(3, "0")}</span>
+      <span>{project.liveUrl ? <><span className="text-accent">●</span> Live</> : <><span>○</span> Private</>}</span>
     </div>
   );
 }
@@ -191,7 +151,7 @@ export function ProjectLinks({ project }: { project: Project }) {
           )}
         </>
       ) : (
-        <span className="text-xs text-white/40">Private / On request</span>
+        <span className="font-mono text-xs text-ink-soft">Private / On request</span>
       )}
     </div>
   );
@@ -212,7 +172,7 @@ function ExternalProjectLink({
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/80 transition-colors hover:border-cyan-300/40 hover:bg-cyan-300/10 hover:text-cyan-100"
+      className="inline-flex items-center gap-1.5 border border-ink bg-paper px-3 py-2 font-mono text-xs font-bold uppercase text-ink transition-colors hover:bg-accent hover:text-accent-ink"
     >
       {children}
     </a>
