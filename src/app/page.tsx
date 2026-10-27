@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 const SkipLink = () => (
   <a
     href="#main"
-    className="fixed left-4 top-4 z-[90] -translate-y-20 rounded-md bg-white px-4 py-2 text-sm font-semibold text-black transition-transform focus:translate-y-0"
+    className="fixed left-4 top-4 z-[90] -translate-y-20 border-2 border-ink bg-ink px-4 py-2 text-sm font-semibold text-paper transition-transform focus:translate-y-0"
   >
     Skip to content
   </a>

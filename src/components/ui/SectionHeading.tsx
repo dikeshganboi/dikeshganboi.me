@@ -14,15 +14,16 @@ export default function SectionHeading({
   return (
     <div>
       {label && (
-        <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-cyan-300">
+        <p className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-accent">
           {label}
         </p>
       )}
-      <h2 className="font-heading text-3xl font-bold tracking-tight text-white sm:text-5xl">
+      <div className="my-4 h-0.5 w-full bg-ink" />
+      <h2 className="text-5xl leading-none text-ink sm:text-7xl">
         {title ?? children}
       </h2>
       {subtitle && (
-        <p className="mt-4 max-w-2xl text-base leading-7 text-[var(--muted)]">
+        <p className="mt-5 max-w-2xl text-base leading-7 text-ink-soft">
           {subtitle}
         </p>
       )}

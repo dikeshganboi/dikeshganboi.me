@@ -4,4 +4,4 @@ export const SITE_URL =
 export const siteName = "Dikesh Ganboi";
 
 export const description =
-  "Dikesh Ganboi is a Pune-based Full-Stack Developer building React and Node.js web apps, testing products carefully, and publishing IEEE research.";
+  "Full-stack apps, tested before they ship. Dikesh Ganboi is a Pune-based developer and IEEE-published researcher.";

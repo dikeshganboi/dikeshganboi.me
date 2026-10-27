@@ -1,30 +1,36 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import dynamic from "next/dynamic";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SITE_URL, description, siteName } from "@/lib/site";
-import IntroCurtain from "@/components/layout/IntroCurtain";
-import CustomCursor from "@/components/layout/CustomCursor";
 import BackToTop from "@/components/layout/BackToTop";
+import MotionProvider from "@/components/ui/MotionProvider";
+import PerformanceMetrics from "@/components/layout/PerformanceMetrics";
 import "./globals.css";
 
 const Footer = dynamic(() => import("@/components/layout/Footer"));
 
-const inter = Inter({
-  variable: "--font-inter",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500"],
+});
+
+const instrument = Instrument_Serif({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  display: "swap",
+  weight: "400",
+  style: "normal",
 });
 
 export const metadata: Metadata = {
@@ -57,6 +63,7 @@ export const metadata: Metadata = {
     icon: "/icon.png",
     apple: "/apple-icon.png",
   },
+  other: { "theme-color": "#F3EFE6" },
 };
 
 export default function RootLayout({
@@ -65,18 +72,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html lang="en" data-theme="light" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => { try { const saved = localStorage.getItem("theme"); document.documentElement.dataset.theme = saved === "dark" ? "dark" : "light"; } catch (_) { document.documentElement.dataset.theme = "light"; } })()`,
+          }}
+        />
+      </head>
+      <body className={`${geist.variable} ${geistMono.variable} ${instrument.variable}`}>
         <SmoothScroll>
-          <IntroCurtain />
-          <CustomCursor />
-          <Navbar />
-          {children}
-          <Footer />
-          <BackToTop />
+          <MotionProvider>
+            <Navbar />
+            {children}
+            <Footer />
+            <BackToTop />
+          </MotionProvider>
         </SmoothScroll>
-        <Analytics />
-        <SpeedInsights />
+        {process.env.NODE_ENV === "production" && <PerformanceMetrics />}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

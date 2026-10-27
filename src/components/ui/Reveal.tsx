@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, type MotionProps } from "framer-motion";
+import { m, type MotionProps } from "framer-motion";
 import type { ReactNode } from "react";
 
 interface RevealProps {
@@ -22,8 +22,8 @@ export default function Reveal({
   };
 
   return (
-    <motion.div className={className} {...motionProps}>
+    <m.div className={className} {...motionProps}>
       {children}
-    </motion.div>
+    </m.div>
   );
 }

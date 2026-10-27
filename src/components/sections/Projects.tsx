@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { useMemo, useState } from "react";
 import FeaturedProjectCard from "@/components/sections/projects/FeaturedProjectCard";
 import ProjectCard from "@/components/sections/projects/ProjectCard";
@@ -10,6 +10,7 @@ import ProjectFilter, {
 import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { portfolio } from "@/data/portfolio";
+import Container from "@/components/ui/Container";
 
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState<ProjectFilterValue>("All");
@@ -37,9 +38,9 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="overflow-x-clip scroll-mt-24 border-b border-white/5 py-24 sm:py-32"
+      className="overflow-x-clip scroll-mt-24 border-b-2 border-ink/20 py-24 sm:py-32"
     >
-      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+      <Container>
         <Reveal>
           <SectionHeading
             label="Projects"
@@ -50,26 +51,26 @@ export default function Projects() {
 
         <Reveal delay={0.1} className="mt-10">
           <ProjectFilter active={activeFilter} onChange={setActiveFilter} />
-          <motion.p
+          <m.p
             key={activeFilter}
             initial={reducedMotion ? false : { opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-3 text-sm text-white/45"
+            className="mt-3 font-mono text-sm text-ink-soft"
           >
             Showing {visibleProjectCount}{" "}
             {visibleProjectCount === 1 ? "project" : "projects"}
-          </motion.p>
+          </m.p>
         </Reveal>
 
         <div className="mt-8">
           <AnimatePresence mode="popLayout" initial={!reducedMotion}>
             {featuredProjects.length > 0 && (
-              <motion.div layout className="space-y-6">
+              <m.div layout className="space-y-6">
                 {featuredProjects[0] && (
                   <FeaturedProjectCard project={featuredProjects[0]} />
                 )}
                 {featuredProjects.length > 1 && (
-                  <motion.div
+                  <m.div
                     layout
                     className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3"
                   >
@@ -80,20 +81,20 @@ export default function Projects() {
                         index={index}
                       />
                     ))}
-                  </motion.div>
+                  </m.div>
                 )}
-              </motion.div>
+              </m.div>
             )}
           </AnimatePresence>
         </div>
 
         {otherProjects.length > 0 && (
           <div className="mt-20">
-            <h3 className="font-heading text-2xl font-semibold text-white">
+            <h3 className="text-2xl font-semibold text-ink">
               More projects
             </h3>
             <AnimatePresence mode="popLayout" initial={!reducedMotion}>
-              <motion.div
+              <m.div
                 layout
                 className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3"
               >
@@ -104,11 +105,11 @@ export default function Projects() {
                     index={index}
                   />
                 ))}
-              </motion.div>
+              </m.div>
             </AnimatePresence>
           </div>
         )}
-      </div>
+      </Container>
     </section>
   );
 }
